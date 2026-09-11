@@ -37,24 +37,30 @@ app.get("/members", async (req, res) => {
 app.post("/members", async (req, res) => {
     try {
         const {
-            name,
+            first_name,
+            last_name,
             email,
             phone,
             date_of_birth,
             gender,
-            address
+            address,
+            height,
+            weight
         } = req.body;
 
         const { data, error } = await supabase
             .from("members")
             .insert([
                 {
-                    name,
+                    first_name,
+                    last_name,
                     email,
                     phone,
                     date_of_birth,
                     gender,
-                    address
+                    address,
+                    height,
+                    weight
                 }
             ])
             .select();
@@ -78,19 +84,19 @@ app.put("/members/:id", async (req, res) => {
         const { id } = req.params;
 
         const {
-            name,
             email,
             phone,
-            address
+            address,
+            weight
         } = req.body;
 
         const { data, error } = await supabase
             .from("members")
             .update({
-                name,
                 email,
                 phone,
-                address
+                address,
+                weight
             })
             .eq("member_id", id)
             .select();
@@ -338,6 +344,8 @@ app.post("/memberships", async (req, res) => {
             plan_id,
             start_date,
             end_date,
+            fitness_goal,
+            additional_services,
             status
         } = req.body;
 
@@ -349,6 +357,8 @@ app.post("/memberships", async (req, res) => {
                     plan_id,
                     start_date,
                     end_date,
+                    fitness_goal,
+                    additional_services,
                     status
                 }
             ])
@@ -373,19 +383,23 @@ app.put("/memberships/:id", async (req, res) => {
         const { id } = req.params;
 
         const {
-            member_id,
-            plan_id,
+           // member_id,
+            //plan_id,
             start_date,
-            end_date
+            end_date,
+            fitness_goal,
+            additional_services
         } = req.body;
 
         const { data, error } = await supabase
             .from("memberships")
             .update({
-                member_id,
-                plan_id,
+               // member_id,
+               // plan_id,
                 start_date,
-                end_date
+                end_date,
+                fitness_goal,
+                additional_services
             })
             .eq("membership_id", id)
             .select();
@@ -474,6 +488,26 @@ app.patch("/memberships/:id/status", async (req, res) => {
 //         });
 //     }
 // });
+app.get("/offers", async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from("offers")
+            .select("*")
+            .eq("status", "Active");
+
+        if (error) {
+            return res.status(500).json({
+                error: error.message
+            });
+        }
+
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({
+            error: error.message
+        });
+    }
+});
 const PORT = 3001;
 
 app.listen(PORT, () => {
