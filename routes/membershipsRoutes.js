@@ -211,9 +211,7 @@ router.get("/:id/access-card", async (req, res) => {
         const CARD_WIDTH = 450;
         const CARD_HEIGHT = 180;
 
-        // =========================
-        // DATE FORMAT: DD MM YYYY
-        // =========================
+      
 
         const formatDate = (date) => {
             if (!date) return "";
@@ -239,17 +237,13 @@ router.get("/:id/access-card", async (req, res) => {
 
         doc.pipe(res);
 
-        // =========================
-        // PREMIUM BACKGROUND
-        // =========================
+       
 
         doc
             .roundedRect(0, 0, CARD_WIDTH, CARD_HEIGHT, 15)
             .fill("#24113F");
 
-        // =========================
-        // HEADER
-        // =========================
+        
 
         doc
             .fillColor("#FFFFFF")
@@ -277,9 +271,7 @@ router.get("/:id/access-card", async (req, res) => {
             .strokeColor("#6F4A91")
             .stroke();
 
-        // =========================
-        // MEMBER DETAILS
-        // =========================
+       
 
         doc
             .fillColor("#BFAAD8")
@@ -297,9 +289,7 @@ router.get("/:id/access-card", async (req, res) => {
                 83
             );
 
-        // =========================
-        // BOTTOM DETAILS
-        // =========================
+   
 
         // Membership ID
         doc
@@ -359,9 +349,7 @@ router.get("/:id/access-card", async (req, res) => {
             .fontSize(10.5)
             .text(status, 350, 131);
 
-        // =========================
-        // FOOTER
-        // =========================
+        
 
         doc
             .fillColor("#BFAAD8")
