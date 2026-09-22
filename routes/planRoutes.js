@@ -136,6 +136,35 @@ router.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
+        const { data: memberships, error: membershipError } = await supabase
+            .from("memberships")
+            .select("membership_id")
+            .eq("plan_id", id);
+
+        if (membershipError) {
+            return res.status(500).json({
+                error: membershipError.message
+            });
+        }
+        if (memberships.length > 0) {
+            const { data, error } = await supabase
+                .from("plans")
+                .update({ status: "Inactive" })
+                .eq("plan_id", id)
+                .select();
+
+            if (error) {
+                return res.status(500).json({
+                    error: error.message
+                });
+            }
+
+            return res.json({
+                message: "Plan is assigned to memberships, so it was deactivated.",
+                plan: data[0]
+            });
+        }
+
         const { data, error } = await supabase
             .from("plans")
             .delete()

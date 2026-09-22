@@ -1,4 +1,3 @@
-
 const memberRoutes = require("./routes/memberRoutes");
 const planRoutes = require("./routes/planRoutes");
 const membershipsRoutes = require("./routes/membershipsRoutes");

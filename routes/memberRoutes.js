@@ -2,6 +2,7 @@ const express = require("express");
 const supabase = require("../db");
 
 const router = express.Router();
+
 router.get("/", async (req, res) => {
 
     try {
@@ -34,7 +35,8 @@ router.post("/", async (req, res) => {
             gender,
             address,
             height,
-            weight
+            weight,
+            membership_id
         } = req.body;
 
         const { data, error } = await supabase
@@ -49,18 +51,19 @@ router.post("/", async (req, res) => {
                     gender,
                     address,
                     height,
-                    weight
+                    weight,
+                    membership_id
                 }
             ])
-            .select();
-
+            .select()
+            .single();
         if (error) {
             return res.status(500).json({
                 error: error.message
             });
         }
 
-        res.status(201).json(data[0]);
+        res.status(201).json(data);
 
     } catch (error) {
         res.status(500).json({
@@ -76,7 +79,8 @@ router.put("/:id", async (req, res) => {
             email,
             phone,
             address,
-            weight
+            weight,
+            height
         } = req.body;
 
         const { data, error } = await supabase
@@ -85,7 +89,8 @@ router.put("/:id", async (req, res) => {
                 email,
                 phone,
                 address,
-                weight
+                weight,
+                height
             })
             .eq("member_id", id)
             .select();
@@ -142,5 +147,30 @@ router.delete("/:id", async (req, res) => {
             error: error.message
         });
     }
+});
+router.patch("/:member_id/membership", async (req, res) => {
+  try {
+    const { member_id } = req.params;
+    const { membership_id } = req.body;
+
+    const { data, error } = await supabase
+      .from("members")
+      .update({ membership_id })
+      .eq("member_id", member_id)
+      .select()
+      .single();
+
+    if (error) {
+      return res.status(500).json({
+        error: error.message
+      });
+    }
+
+    return res.status(200).json(data);
+  } catch (error) {
+    return res.status(500).json({
+      error: error.message
+    });
+  }
 });
 module.exports = router;
