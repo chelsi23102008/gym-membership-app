@@ -18,7 +18,12 @@ app.use("/plans", planRoutes);
 app.use("/memberships", membershipsRoutes);
 app.use("/offers", offersRoutes);
 
-const PORT = 3001;
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+
+if (require.main === module) {
+    const PORT = 3001;
+
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
+module.exports = app;
